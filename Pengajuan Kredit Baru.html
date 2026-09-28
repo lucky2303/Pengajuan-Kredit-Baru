@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PT. JKL - Sistem Pengajuan Kredit Digital</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+  <!-- Header Navigasi -->
+  <header class="bg-blue-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-car-side text-2xl text-yellow-400"></i>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight">PT. JKL Multifinance</h1>
+          <p class="text-xs text-blue-200">Sistem Digitalisasi Pengajuan Kredit Kendaraan Bermotor</p>
+        </div>
+      </div>
+      <div class="flex space-x-2">
+        <button onclick="switchTab('submission')" id="nav-submission" class="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-700 hover:bg-blue-600 transition">
+          <i class="fa-solid fa-file-circle-plus mr-1"></i> Form Pengajuan
+        </button>
+        <button onclick="switchTab('approval')" id="nav-approval" class="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-800 hover:bg-blue-700 transition">
+          <i class="fa-solid fa-user-check mr-1"></i> Atasan (Approval)
+        </button>
+        <button onclick="switchTab('backoffice')" id="nav-backoffice" class="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-800 hover:bg-blue-700 transition">
+          <i class="fa-solid fa-building-columns mr-1"></i> Admin Backoffice
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-8">
+
+    <section id="tab-submission" class="block">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+        <div class="border-b border-slate-200 pb-4 mb-6">
+          <h2 class="text-2xl font-bold text-slate-800">Formulir Pengajuan Kredit Baru</h2>
+          <p class="text-sm text-slate-500">Isi seluruh data nasabah, spesifikasi kendaraan, dan skema pembiayaan dengan lengkap.</p>
+        </div>
+
+        <form id="loanForm" onsubmit="handleFormSubmit(event)" class="space-y-8">
+          
+          <!-- Bagian Data Konsumen -->
+          <div>
+            <h3 class="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+              <i class="fa-solid fa-id-card mr-2"></i> 1. Data Konsumen
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Lengkap</label>
+                <input type="text" id="custName" required placeholder="Sesuai KTP" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nomor Induk Kependudukan (NIK)</label>
+                <input type="number" id="custNik" required placeholder="16 Digit NIK" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tanggal Lahir</label>
+                <input type="date" id="custDob" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Status Perkawinan</label>
+                <select id="custMarital" onchange="toggleSpouseField()" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                  <option value="Belum Menikah">Belum Menikah</option>
+                  <option value="Menikah">Menikah</option>
+                  <option value="Cerai">Cerai</option>
+                </select>
+              </div>
+              <div id="spouseField" class="hidden md:col-span-2">
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Data Pasangan (Nama & NIK)</label>
+                <input type="text" id="custSpouse" placeholder="Nama Pasangan - NIK Pasangan" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+            </div>
+          </div>
+
+          <!-- Bagian Data Kendaraan -->
+          <div>
+            <h3 class="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+              <i class="fa-solid fa-motorcycle mr-2"></i> 2. Data Kendaraan
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Dealer</label>
+                <input type="text" id="vehDealer" required placeholder="Nama Dealer Rekanan" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Merk Kendaraan</label>
+                <input type="text" id="vehBrand" required placeholder="Contoh: Honda / Yamaha" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Model Kendaraan</label>
+                <input type="text" id="vehModel" required placeholder="Contoh: Vario 160 / NMAX" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tipe Kendaraan</label>
+                <input type="text" id="vehType" required placeholder="Contoh: CBS / ABS" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Warna Kendaraan</label>
+                <input type="text" id="vehColor" required placeholder="Contoh: Matte Black" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Harga Kendaraan (OTR)</label>
+                <input type="number" id="vehPrice" required oninput="calculateInstallment()" placeholder="Rp" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold">
+              </div>
+            </div>
+          </div>
+
+          <!-- Bagian Data Pinjaman -->
+          <div>
+            <h3 class="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+              <i class="fa-solid fa-coins mr-2"></i> 3. Data Pinjaman & Angsuran
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Asuransi</label>
+                <select id="loanInsurance" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                  <option value="Total Loss Only (TLO)">Total Loss Only (TLO)</option>
+                  <option value="All Risk">All Risk</option>
+                  <option value="Kombinasi">Kombinasi</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Uang Muka / Down Payment (DP)</label>
+                <input type="number" id="loanDp" required oninput="calculateInstallment()" placeholder="Rp" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tenor Kredit (Bulan)</label>
+                <select id="loanTenor" onchange="calculateInstallment()" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                  <option value="12">12 Bulan (1 Tahun)</option>
+                  <option value="24">24 Bulan (2 Tahun)</option>
+                  <option value="36">36 Bulan (3 Tahun)</option>
+                  <option value="48">48 Bulan (4 Tahun)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Angsuran / Bulan (Estimasi)</label>
+                <input type="text" id="loanInstallment" readonly class="w-full px-3 py-2 border rounded-lg bg-slate-100 text-blue-900 font-bold focus:outline-none text-sm" value="Rp 0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Bagian Upload Dokumen -->
+          <div>
+            <h3 class="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+              <i class="fa-solid fa-cloud-arrow-up mr-2"></i> 4. Upload Dokumen Persyaratan
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div class="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center">
+                <i class="fa-solid fa-file-pdf text-slate-400 text-xl mb-1"></i>
+                <span class="block text-xs font-bold text-slate-700">KTP Konsumen</span>
+                <input type="file" required class="text-xs text-slate-500 mt-1 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700">
+              </div>
+              <div class="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center">
+                <i class="fa-solid fa-file-pdf text-slate-400 text-xl mb-1"></i>
+                <span class="block text-xs font-bold text-slate-700">Kartu Keluarga (KK)</span>
+                <input type="file" required class="text-xs text-slate-500 mt-1 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700">
+              </div>
+              <div class="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center">
+                <i class="fa-solid fa-file-pdf text-slate-400 text-xl mb-1"></i>
+                <span class="block text-xs font-bold text-slate-700">Bukti Bayar Tanda Jadi</span>
+                <input type="file" required class="text-xs text-slate-500 mt-1 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700">
+              </div>
+              <div class="border-2 border-dashed border-slate-300 rounded-lg p-3 text-center">
+                <i class="fa-solid fa-file-pdf text-slate-400 text-xl mb-1"></i>
+                <span class="block text-xs font-bold text-slate-700">Surat Pesanan Kendaraan (SPK)</span>
+                <input type="file" required class="text-xs text-slate-500 mt-1 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700">
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-4 border-t">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-md transition duration-200 flex items-center">
+              <i class="fa-solid fa-paper-plane mr-2"></i> Submit Pengajuan Kredit
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- TAB 2: REVIEW & APPROVAL (ATASAN MARKETING) -->
+    <section id="tab-approval" class="hidden">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+        <div class="flex justify-between items-center border-b border-slate-200 pb-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-800">Daftar Pengajuan Butuh Approval</h2>
+            <p class="text-sm text-slate-500">Persetujuan pengajuan kredit oleh Atasan Marketing secara terintegrasi.</p>
+          </div>
+          <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-full" id="pendingCount">0 Pending</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-slate-50 border-b text-slate-600 font-semibold uppercase text-xs">
+                <th class="py-3 px-4">No. Pengajuan</th>
+                <th class="py-3 px-4">Nama Konsumen</th>
+                <th class="py-3 px-4">Kendaraan</th>
+                <th class="py-3 px-4">Tenor & Angsuran</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="approvalTableBody" class="divide-y divide-slate-100">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-backoffice" class="hidden">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+        <div class="border-b border-slate-200 pb-4 mb-6">
+          <h2 class="text-2xl font-bold text-slate-800">Penerbitan Dokumen & Pencairan Dana</h2>
+          <p class="text-sm text-slate-500">Monitoring status tanda tangan kontrak (E-Sign) dan eksekusi pencairan dana ke dealer.</p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-slate-50 border-b text-slate-600 font-semibold uppercase text-xs">
+                <th class="py-3 px-4">ID Kontrak</th>
+                <th class="py-3 px-4">Konsumen</th>
+                <th class="py-3 px-4">Dealer</th>
+                <th class="py-3 px-4">Dokumen Digital</th>
+                <th class="py-3 px-4">Status TTD</th>
+                <th class="py-3 px-4 text-center">Pencairan Dana</th>
+              </tr>
+            </thead>
+            <tbody id="backofficeTableBody" class="divide-y divide-slate-100">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // State Penyimpanan Data Pengajuan
+    let applications = [
+      {
+        id: "CR-2026-001",
+        name: "Budi Santoso",
+        nik: "3578012304950001",
+        dob: "1995-04-23",
+        marital: "Menikah",
+        spouse: "Siti Rahma - 3578015509970002",
+        dealer: "Honda Surya Agung",
+        brand: "Honda",
+        model: "Vario 160",
+        type: "CBS",
+        color: "Matte Black",
+        price: 27500000,
+        insurance: "Total Loss Only (TLO)",
+        dp: 5000000,
+        tenor: 24,
+        installment: 1285000,
+        status: "Pending Approval",
+        signed: false,
+        disbursed: false
+      }
+    ];
+
+    // Navigasi Tab
+    function switchTab(tabId) {
+      ['submission', 'approval', 'backoffice'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        document.getElementById(`nav-${t}`).classList.replace('bg-blue-700', 'bg-blue-800');
+      });
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      document.getElementById(`nav-${tabId}`).classList.replace('bg-blue-800', 'bg-blue-700');
+      renderTables();
+    }
+
+    function toggleSpouseField() {
+      const marital = document.getElementById('custMarital').value;
+      const spouseField = document.getElementById('spouseField');
+      if (marital === 'Menikah') {
+        spouseField.classList.remove('hidden');
+      } else {
+        spouseField.classList.add('hidden');
+      }
+    }
+
+    // Kalkulasi Angsuran Sederhana (Bunga flat 10% / tahun)
+    function calculateInstallment() {
+      const price = parseFloat(document.getElementById('vehPrice').value) || 0;
+      const dp = parseFloat(document.getElementById('loanDp').value) || 0;
+      const tenor = parseInt(document.getElementById('loanTenor').value) || 12;
+
+      const pokok = price - dp;
+      if (pokok <= 0) {
+        document.getElementById('loanInstallment').value = "Rp 0";
+        return 0;
+      }
+      const bungaPerTahun = 0.10;
+      const totalBunga = pokok * bungaPerTahun * (tenor / 12);
+      const angsuran = Math.round((pokok + totalBunga) / tenor);
+      
+      document.getElementById('loanInstallment').value = `Rp ${angsuran.toLocaleString('id-ID')}`;
+      return angsuran;
+    }
+
+    // Submit Pengajuan Baru
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const price = parseFloat(document.getElementById('vehPrice').value);
+      const dp = parseFloat(document.getElementById('loanDp').value);
+      const tenor = parseInt(document.getElementById('loanTenor').value);
+      const angsuran = calculateInstallment();
+
+      const newApp = {
+        id: `CR-2026-00${applications.length + 1}`,
+        name: document.getElementById('custName').value,
+        nik: document.getElementById('custNik').value,
+        dob: document.getElementById('custDob').value,
+        marital: document.getElementById('custMarital').value,
+        spouse: document.getElementById('custSpouse').value || '-',
+        dealer: document.getElementById('vehDealer').value,
+        brand: document.getElementById('vehBrand').value,
+        model: document.getElementById('vehModel').value,
+        type: document.getElementById('vehType').value,
+        color: document.getElementById('vehColor').value,
+        price: price,
+        insurance: document.getElementById('loanInsurance').value,
+        dp: dp,
+        tenor: tenor,
+        installment: angsuran,
+        status: "Pending Approval",
+        signed: false,
+        disbursed: false
+      };
+
+      applications.push(newApp);
+      alert(`Pengajuan berhasil dikirim dengan Nomor: ${newApp.id}`);
+      document.getElementById('loanForm').reset();
+      document.getElementById('loanInstallment').value = "Rp 0";
+      switchTab('approval');
+    }
+
+    // Aksi Approval Atasan
+    function approveLoan(id) {
+      const item = applications.find(a => a.id === id);
+      if (item) {
+        item.status = "Approved";
+        alert(`Pengajuan ${id} telah DISETUJUI. E-Kontrak & E-PO otomatis diterbitkan.`);
+        renderTables();
+      }
+    }
+
+    function rejectLoan(id) {
+      const item = applications.find(a => a.id === id);
+      if (item) {
+        item.status = "Rejected";
+        alert(`Pengajuan ${id} telah DITOLAK.`);
+        renderTables();
+      }
+    }
+
+    // Simulasi E-Sign Konsumen
+    function signContract(id) {
+      const item = applications.find(a => a.id === id);
+      if (item) {
+        item.signed = true;
+        alert(`Verifikasi OTP Sukses! Dokumen Kontrak untuk ${item.name} berhasil ditandatangani secara digital.`);
+        renderTables();
+      }
+    }
+
+    // Pencairan Dana oleh Admin Backoffice
+    function disburseLoan(id) {
+      const item = applications.find(a => a.id === id);
+      if (item && item.signed) {
+        item.disbursed = true;
+        alert(`DANA BERHASIL DICAIRKAN ke rekening Dealer ${item.dealer} sebesar Rp ${(item.price - item.dp).toLocaleString('id-ID')}.`);
+        renderTables();
+      }
+    }
+
+    // Render Data ke Tabel
+    function renderTables() {
+      // 1. Table Approval
+      const approvalBody = document.getElementById('approvalTableBody');
+      approvalBody.innerHTML = '';
+      const pendingApps = applications.filter(a => a.status === 'Pending Approval');
+      document.getElementById('pendingCount').innerText = `${pendingApps.length} Pending`;
+
+      applications.forEach(a => {
+        const row = document.createElement('tr');
+        row.className = "hover:bg-slate-50 transition border-b";
+        row.innerHTML = `
+          <td class="py-3 px-4 font-mono font-bold text-blue-900">${a.id}</td>
+          <td class="py-3 px-4">
+            <span class="font-semibold block">${a.name}</span>
+            <span class="text-xs text-slate-500">NIK: ${a.nik}</span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="block">${a.brand} ${a.model} (${a.color})</span>
+            <span class="text-xs text-slate-500">Dealer: ${a.dealer}</span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="block font-semibold">Rp ${a.installment.toLocaleString('id-ID')} / bln</span>
+            <span class="text-xs text-slate-500">${a.tenor} Bulan</span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2.5 py-1 text-xs font-semibold rounded-full ${
+              a.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' :
+              a.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
+            }">${a.status}</span>
+          </td>
+          <td class="py-3 px-4 text-center">
+            ${a.status === 'Pending Approval' ? `
+              <div class="flex justify-center space-x-2">
+                <button onclick="approveLoan('${a.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded font-medium">Approve</button>
+                <button onclick="rejectLoan('${a.id}')" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-3 py-1.5 rounded font-medium">Reject</button>
+              </div>
+            ` : `<span class="text-xs text-slate-400">Selesai</span>`}
+          </td>
+        `;
+        approvalBody.appendChild(row);
+      });
+
+      // 2. Table Backoffice
+      const backofficeBody = document.getElementById('backofficeTableBody');
+      backofficeBody.innerHTML = '';
+      const approvedApps = applications.filter(a => a.status === 'Approved');
+
+      if (approvedApps.length === 0) {
+        backofficeBody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400">Belum ada pengajuan yang di-approve</td></tr>`;
+      } else {
+        approvedApps.forEach(a => {
+          const row = document.createElement('tr');
+          row.className = "hover:bg-slate-50 transition border-b";
+          row.innerHTML = `
+            <td class="py-3 px-4 font-mono font-bold text-blue-900">${a.id}</td>
+            <td class="py-3 px-4 font-medium">${a.name}</td>
+            <td class="py-3 px-4">${a.dealer}</td>
+            <td class="py-3 px-4">
+              <span class="inline-block bg-blue-50 text-blue-700 border border-blue-200 text-xs px-2 py-0.5 rounded mr-1">e-Kontrak.pdf</span>
+              <span class="inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-2 py-0.5 rounded">e-PO.pdf</span>
+            </td>
+            <td class="py-3 px-4">
+              ${a.signed 
+                ? `<span class="text-xs font-semibold text-emerald-600 flex items-center"><i class="fa-solid fa-check-circle mr-1"></i> Ditandatangani</span>`
+                : `<button onclick="signContract('${a.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1 rounded">Simulasi E-Sign</button>`
+              }
+            </td>
+            <td class="py-3 px-4 text-center">
+              ${a.disbursed 
+                ? `<span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">Dana Cair</span>`
+                : `<button onclick="disburseLoan('${a.id}')" ${!a.signed ? 'disabled class="opacity-50 cursor-not-allowed bg-slate-400 text-white text-xs px-3 py-1.5 rounded"' : 'class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded font-semibold"'}>Cairkan Dana</button>`
+              }
+            </td>
+          `;
+          backofficeBody.appendChild(row);
+        });
+      }
+    }
+
+    renderTables();
+  </script>
+</body>
+</html>
